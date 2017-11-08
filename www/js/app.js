@@ -208,9 +208,9 @@ var camera, scene, renderer, controls;
             }
           });
           
-          objects.forEach(function(object){
+          /*objects.forEach(function(object){
             object.translateX(1);
-          });
+          });*/
           prevTime = time;
         }
         stats.end();
