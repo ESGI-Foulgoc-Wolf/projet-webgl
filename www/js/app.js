@@ -79,6 +79,10 @@ function addGround() {
 
 function render() {
   requestAnimationFrame(render);
+  var time = performance.now() / 1000;
+  stats.begin();
+        
+  stats.end();
   renderer.render(scene, camera);
 }
 
@@ -86,6 +90,11 @@ var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
 var renderer = new THREE.WebGLRenderer();
 var controls = new THREE.OrbitControls( camera, renderer.domElement );
+
+var stats = new Stats();
+stats.showPanel( 0 );
+document.body.appendChild( stats.dom );
+
 
 setupCamera();
 addLights();
