@@ -1,4 +1,5 @@
 var camera, scene, renderer, controls;
+      var ground = [];
       var objects = [];
       var raycaster;
       var blocker = document.getElementById( 'blocker' );
@@ -107,21 +108,24 @@ var camera, scene, renderer, controls;
               break;
           }
         };
+
+        var box_geo = new THREE.BoxBufferGeometry(100, 50, 50);
+        var box_mat = new THREE.MeshBasicMaterial( { color: 0xfffff } );
+        box = new THREE.Mesh( box_geo, box_mat );
+        box.position.set(100,100,-200);
+        scene.add( box );
+        objects.push( box );
+
+        var box_geo2 = new THREE.BoxBufferGeometry(100, 100, 100);
+        box2 = new THREE.Mesh( box_geo2, box_mat );
+        box2.position.set(0,50,-200);
+        scene.add( box2 );
+        objects.push( box2 );
+
         document.addEventListener( 'keydown', onKeyDown, false );
         document.addEventListener( 'keyup', onKeyUp, false );
         raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
-        // floor
-        
 
-        /*var group = new THREE.Group();
-        group.add( box );
-        group.add( box2 );
-
-        scene.add( group );
-
-        group.rotation.x+=0.5;*/
-
-        //
         renderer = new THREE.WebGLRenderer();
         renderer.setPixelRatio( window.devicePixelRatio );
         renderer.setSize( window.innerWidth, window.innerHeight );
@@ -141,8 +145,10 @@ var camera, scene, renderer, controls;
         if ( controlsEnabled === true ) {
           raycaster.ray.origin.copy( controls.getObject().position );
           raycaster.ray.origin.y -= 10;
-          var intersections = raycaster.intersectObjects( objects );
-          var onObject = intersections.length > 0;
+          var intersections_ground = raycaster.intersectObjects( ground );
+          var onGround = intersections_ground.length > 0;
+           var intersections_objects = raycaster.intersectObjects( objects );
+          var onObjects = intersections_objects.length > 0;
           var time = performance.now();
           var delta = ( time - prevTime ) / 1000;
           velocity.x -= velocity.x * 10.0 * delta;
@@ -153,21 +159,58 @@ var camera, scene, renderer, controls;
           direction.normalize(); // this ensures consistent movements in all directions
           if ( moveForward || moveBackward ) velocity.z -= direction.z * 1600.0 * delta;
           if ( moveLeft || moveRight ) velocity.x -= direction.x * 1600.0 * delta;
-          if ( onObject === true ) {
+          if ( onGround === true ) {
+            velocity.y = Math.max( 0, velocity.y );
+            canJump = true;
+          }
+          if ( (moveForward || moveBackward || moveLeft || moveRight) && onGround === true){
+            velocity.y = Math.max( 200, velocity.y );
+            canJump = true;
+          }
+          if ( onObjects === true ) {
             velocity.y = Math.max( 0, velocity.y );
             canJump = true;
           }
           controls.getObject().translateX( velocity.x * delta );
           controls.getObject().translateY( velocity.y * delta );
           controls.getObject().translateZ( velocity.z * delta );
-          if ( controls.getObject().position.y < 100 ) {
+          if ( controls.getObject().position.y < 0 ) {
             velocity.y = 0;
-            controls.getObject().position.y = 100;
+            controls.getObject().position.y = 200;
             canJump = true;
           }
-          /*if ( controls.getObject().position.x > 100 ) {
-            controls.getObject().position.x = -100;
-          }*/
+          if ( controls.getObject().position.y < 50 ) {
+            velocity.y = 0;
+            controls.getObject().position.y = 50;
+            canJump = true;
+          }
+
+          objects.forEach(function(object){
+            if ( controls.getObject().position.x > (object.position.x - object.geometry.parameters.width/2 - 10) &&
+              controls.getObject().position.x < (object.position.x + object.geometry.parameters.width/2 + 10) &&
+              controls.getObject().position.z > (object.position.z - object.geometry.parameters.depth/2 - 10) &&
+              controls.getObject().position.z < (object.position.z + object.geometry.parameters.depth/2 + 10) &&
+              controls.getObject().position.y > (object.position.y - object.geometry.parameters.height/2 - 5) &&
+              controls.getObject().position.y < (object.position.y + object.geometry.parameters.height/2 + 5)){
+
+                if(controls.getObject().position.x < (object.position.x - object.geometry.parameters.width/2) ){
+                  controls.getObject().position.x = object.position.x - object.geometry.parameters.width/2 -10;
+                } else if(controls.getObject().position.z < (object.position.z - object.geometry.parameters.depth/2) ){
+                  controls.getObject().position.z = object.position.z - object.geometry.parameters.depth/2 -10;
+                } else if(controls.getObject().position.x > (object.position.x + object.geometry.parameters.width/2)){
+                  controls.getObject().position.x = object.position.x + object.geometry.parameters.width/2 +10;
+                } else if(controls.getObject().position.z > (object.position.z + object.geometry.parameters.depth/2) ){
+                  controls.getObject().position.z = object.position.z + object.geometry.parameters.depth/2 +10;
+                } else if(controls.getObject().position.y > (object.position.y - object.geometry.parameters.height/2 -5) ){
+                  controls.getObject().position.y = object.position.y - object.geometry.parameters.height/2 -10;
+                  velocity.y = -10;
+                }
+            }
+          });
+          
+          objects.forEach(function(object){
+            object.translateX(1);
+          });
           prevTime = time;
         }
         stats.end();
@@ -233,7 +276,6 @@ var camera, scene, renderer, controls;
         var q = new THREE.Quaternion();
         q.setFromAxisAngle( new THREE.Vector3(-1,0,0), 90 * Math.PI / 180 );
         plane.quaternion.multiplyQuaternions( q, plane.quaternion );
-
         scene.add(plane);
-        objects.push(plane);
+        ground.push(plane);
       }
