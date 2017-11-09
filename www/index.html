@@ -43,10 +43,27 @@
 		</style>
 	</head>
 	<body>
+
+	<script src="js/three.js"></script>
+		<script src="js/PointerLockControls.js"></script>
+		<script src="js/stats.min.js"></script>
+
+		<div id="blocker">
+
+			<div id="instructions">
+				<span style="font-size:40px">Click to play</span>
+				<br />
+				(Z, Q, S, D = Move, SPACE = Jump, MOUSE = Look around)
+			</div>
+
+		</div>
+		<div id="assets" hidden="hidden"><img id="landscape-image" src="assets/Heightmap.png"/></div>
+		<canvas id="canvas" hidden="hidden"></canvas>
+
 		<script src="js/three.js"></script>
 		<script src="js/PointerLockControls.js"></script>
 		<script src="js/stats.min.js"></script>
-		<script src="js/test2.js"></script>
+		<script src="js/app.js"></script>
 
 	</body>
 </html>

@@ -43,7 +43,7 @@ var camera, scene, renderer, controls;
       stats.showPanel( 0 );
       document.body.appendChild( stats.dom );
       init();
-      addLights();
+      //addLights();
       addGround();
       addSky();
       addPOKEMON();
@@ -64,9 +64,9 @@ var camera, scene, renderer, controls;
         scene = new THREE.Scene();
         scene.background = new THREE.Color( 0xffffff );
         //scene.fog = new THREE.Fog( 0xffffff, 0, 1000 );
-        var light = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.75 );
+        /*var light = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.75 );
         light.position.set( 0.5, 1, 0.75 );
-        scene.add( light );
+        scene.add( light );*/
         controls = new THREE.PointerLockControls( camera );
         scene.add( controls.getObject() );
         var onKeyDown = function ( event ) {
@@ -113,9 +113,26 @@ var camera, scene, renderer, controls;
           }
         };
 
+        spotLight = new THREE.SpotLight( 0xf4426e, 1 );
+        spotLight.position.set( 150, 400, 35 );
+        spotLight.angle = Math.PI / 4;
+        spotLight.penumbra = 0.05;
+        spotLight.decay = 2;
+        spotLight.distance = 2000;
+        spotLight.castShadow = true;
+        spotLight.shadow.mapSize.width = 1024;
+        spotLight.shadow.mapSize.height = 1024;
+        spotLight.shadow.camera.near = 10;
+        spotLight.shadow.camera.far = 200;
+        scene.add( spotLight );
+        lightHelper = new THREE.SpotLightHelper( spotLight );
+        scene.add( lightHelper );
+
         var box_geo = new THREE.BoxBufferGeometry(100, 50, 50);
-        var box_mat = new THREE.MeshBasicMaterial( { color: 0xfffff } );
+        var box_mat = new THREE.MeshPhongMaterial( { color: 0xfffff } );
         box = new THREE.Mesh( box_geo, box_mat );
+        box.castShadow = true;
+        box.receiveShadow = true;
         box.position.set(100,100,-200);
         scene.add( box );
         objects.push( box );
@@ -123,6 +140,8 @@ var camera, scene, renderer, controls;
         var box_geo2 = new THREE.BoxBufferGeometry(100, 100, 100);
         box2 = new THREE.Mesh( box_geo2, box_mat );
         box2.position.set(0,50,-200);
+        box2.castShadow = true;
+        box2.receiveShadow = true;
         scene.add( box2 );
         objects.push( box2 );
 
@@ -280,6 +299,8 @@ var camera, scene, renderer, controls;
         var q = new THREE.Quaternion();
         q.setFromAxisAngle( new THREE.Vector3(-1,0,0), 90 * Math.PI / 180 );
         plane.quaternion.multiplyQuaternions( q, plane.quaternion );
+        plane.castShadow = true;
+        plane.receiveShadow = true;
         scene.add(plane);
         ground.push(plane);
       }
