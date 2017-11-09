@@ -125,7 +125,20 @@ var camera, scene, renderer, controls;
         spotLight.shadow.camera.near = 10;
         spotLight.shadow.camera.far = 200;
         scene.add( spotLight );
-        lightHelper = new THREE.SpotLightHelper( spotLight );
+
+        spotlight2 = new THREE.SpotLight( 0xffffff, 1 );
+        spotlight2.position.set( -300, 400, -200 );
+        spotlight2.angle = Math.PI / 4;
+        spotlight2.penumbra = 0.05;
+        spotlight2.decay = 2;
+        spotlight2.distance = 20000;
+        spotlight2.castShadow = true;
+        spotlight2.shadow.mapSize.width = 1024;
+        spotlight2.shadow.mapSize.height = 1024;
+        spotlight2.shadow.camera.near = 10;
+        spotlight2.shadow.camera.far = 200;
+        scene.add( spotlight2 );
+        lightHelper = new THREE.SpotLightHelper( spotlight2 );
         scene.add( lightHelper );
 
         var box_geo = new THREE.BoxBufferGeometry(100, 50, 50);
@@ -152,6 +165,8 @@ var camera, scene, renderer, controls;
         renderer = new THREE.WebGLRenderer();
         renderer.setPixelRatio( window.devicePixelRatio );
         renderer.setSize( window.innerWidth, window.innerHeight );
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMapType = THREE.PCFSoftShadowMap;
         document.body.appendChild( renderer.domElement );
         //
         window.addEventListener( 'resize', onWindowResize, false );
@@ -343,9 +358,11 @@ var camera, scene, renderer, controls;
             Mysterbe.position.z = 0;
             Mysterbe.rotation.y = Math.PI ;
             Mysterbe.scale.set(50,50,50) ;
-    
+            /*Mysterbe.castShadow = true;
+            Mysterbe.receiveShadow = true;*/
     
             scene.add( Mysterbe );
+            ground.push( Mysterbe );
           }
         );
       }
@@ -363,6 +380,8 @@ var camera, scene, renderer, controls;
             sword.position.z = - 200;
             sword.rotation.z = Math.PI / 2 ;
             sword.scale.set(10,10,10) ;
+            sword.castShadow = true;
+            sword.receiveShadow = true;
     
     
             scene.add( sword );
