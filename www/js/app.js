@@ -4,6 +4,7 @@ var camera, scene, renderer, controls;
       var raycaster;
       var blocker = document.getElementById( 'blocker' );
       var instructions = document.getElementById( 'instructions' );
+      var loader = new THREE.JSONLoader(); // instantiate a loader pour blender
       // http://www.html5rocks.com/en/tutorials/pointerlock/intro/
       var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
       if ( havePointerLock ) {
@@ -45,6 +46,8 @@ var camera, scene, renderer, controls;
       addLights();
       addGround();
       addSky();
+      addPOKEMON();
+      addSword();
       
       animate();
       var controlsEnabled = false;
@@ -57,10 +60,10 @@ var camera, scene, renderer, controls;
       var velocity = new THREE.Vector3();
       var direction = new THREE.Vector3();
       function init() {
-        camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
+        camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 2000 );
         scene = new THREE.Scene();
         scene.background = new THREE.Color( 0xffffff );
-        scene.fog = new THREE.Fog( 0xffffff, 0, 1000 );
+        //scene.fog = new THREE.Fog( 0xffffff, 0, 1000 );
         var light = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.75 );
         light.position.set( 0.5, 1, 0.75 );
         scene.add( light );
@@ -304,4 +307,44 @@ var camera, scene, renderer, controls;
         skyMaterial.map = skyTexture;
     
         return skyMaterial
+      }
+
+      function addPOKEMON(){
+        // load a resource
+        loader.load(
+            // resource URL
+            'object/Mysterbe.json',
+            // Function when resource is loaded
+            function ( geometry , materials ) {
+            Mysterbe = new THREE.Mesh( geometry , new THREE.MeshFaceMaterial(materials) );
+            Mysterbe.position.x = 0;
+            Mysterbe.position.y = 200;
+            Mysterbe.position.z = 0;
+            Mysterbe.rotation.y = Math.PI ;
+            Mysterbe.scale.set(50,50,50) ;
+    
+    
+            scene.add( Mysterbe );
+          }
+        );
+      }
+
+      function addSword(){
+        // load a resource
+        loader.load(
+            // resource URL
+            'object/sword.json',
+            // Function when resource is loaded
+            function ( geometry , materials ) {
+            sword = new THREE.Mesh( geometry , new THREE.MeshFaceMaterial(materials) );
+            sword.position.x = 0;
+            sword.position.y = 120;
+            sword.position.z = - 200;
+            sword.rotation.z = Math.PI / 2 ;
+            sword.scale.set(10,10,10) ;
+    
+    
+            scene.add( sword );
+          }
+        );
       }
