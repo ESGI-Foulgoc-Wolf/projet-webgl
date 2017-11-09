@@ -44,6 +44,7 @@ var camera, scene, renderer, controls;
       init();
       addLights();
       addGround();
+      addSky();
       
       animate();
       var controlsEnabled = false;
@@ -278,4 +279,29 @@ var camera, scene, renderer, controls;
         plane.quaternion.multiplyQuaternions( q, plane.quaternion );
         scene.add(plane);
         ground.push(plane);
+      }
+
+      function addSky(){
+        var skyGeometry = new THREE.SphereGeometry( 1000, 32, 32 );
+        var skyMaterial = new createSkyMaterial();
+        var sky = new THREE.Mesh( skyGeometry, skyMaterial );
+        skyMaterial.side = THREE.DoubleSide
+        sky.castShadow = true;
+        sky.receiveShadow = true;
+    
+        sky.position.x = 0;
+        sky.position.y = 0;
+        sky.position.x = 0;
+    
+    
+        scene.add( sky );
+      }
+    
+      function createSkyMaterial(){
+    
+        var skyTexture = THREE.ImageUtils.loadTexture("textures/sky.jpg");
+        var skyMaterial = new THREE.MeshBasicMaterial();
+        skyMaterial.map = skyTexture;
+    
+        return skyMaterial
       }
