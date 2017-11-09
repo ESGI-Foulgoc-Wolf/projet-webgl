@@ -1,0 +1,79 @@
+{
+	"metadata": {
+		"version": "4.3",
+		"type": "Object",
+		"generator": "UnityThreeExporter"
+	},
+	"geometries": [
+	],
+	"materials": [
+	],
+	"object": {
+		"uuid": "47229797-24b4-40cc-ac89-bf9439145d10",
+		"type": "Object3D",
+		"name": "World",
+		"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+		"children": [
+			{
+				"uuid": "a7123874-2fd7-4ce8-bf4c-13736b8ae0a6",
+				"type": "AmbientLight",
+				"color": "#363942",
+				"name": "RenderSettingsAmbientLight"
+			},
+			{
+				"uuid": "dbc80064-42fe-40ed-802b-ae764179bbea",
+				"type": "Object3D",
+				"name": "Directional light",
+				"matrix": [0,-0.866,0.5,0,0,0.5,0.866,0,-1,0,0,0,0,0,0,1]
+			},
+			{
+				"uuid": "f19cdf95-5206-458a-b50f-b5653965e163",
+				"type": "Object3D",
+				"name": "Terrain",
+				"children": [
+					{
+						"uuid": "5cb92199-9a36-4289-abba-b4e0b5b269df",
+						"name": "Terrain_Collider",
+						"type": "Object3D",
+						"userData": {
+						}
+					}
+				],
+				"matrix": [0,0,1,0,0,1,0,0,-1,0,0,0,0,0,0,1]
+			},
+			{
+				"uuid": "46dcb17b-a076-4be5-beba-43a235448be0",
+				"type": "Object3D",
+				"name": "Directional light",
+				"matrix": [0,-0.866,0.5,0,0,0.5,0.866,0,-1,0,0,0,0,0,0,1]
+			}
+		]
+	},
+	"images": [
+		{
+			"url": "Lightmap-0_comp_light.png",
+			"uuid": "38f2bbd3-6f9e-43cc-9f4f-7dfd6ea97217",
+			"name": "Lightmap-0_comp_light.png",
+			"originalUrl": "Lightmap-0_comp_light.png"
+		},
+		{
+			"url": "Lightmap-0_comp_dir.png",
+			"uuid": "fba2612f-8416-43e5-8bd3-8c139bb935f2",
+			"name": "Lightmap-0_comp_dir.png",
+			"originalUrl": "Lightmap-0_comp_dir.png"
+		}
+	],
+	"textures": [
+		{
+			"uuid": "4469336d-76ce-402a-9b81-e4b95d09e1e9_MainTex",
+			"offset": [0, 0],
+			"repeat": [1, 1],
+			"magFilter": 1006,
+			"minFilter": 1008,
+			"wrap": [1001,1001],
+			"image": "38f2bbd3-6f9e-43cc-9f4f-7dfd6ea97217",
+			"name": "Lightmap-0_comp_light.png",
+			"anisotropy": 16
+		}
+	]
+}
